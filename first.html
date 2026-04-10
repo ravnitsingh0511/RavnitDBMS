@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SQL Table Creation - Practice Questions</title>
     <style>
-      * {
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -18,84 +18,102 @@ body {
   padding: 20px;
 }
 
-/* Center layout */
-body > * {
+.container {
   max-width: 1000px;
   margin: auto;
 }
 
 /* Header */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-  border-bottom: 1px solid #1e293b;
-  padding-bottom: 10px;
+h1 {
+  margin-bottom: 20px;
 }
 
-.header h1 {
-  font-size: 26px;
-}
-
-.back-btn {
+.back-link {
+  display: inline-block;
+  margin-bottom: 20px;
   text-decoration: none;
   background: #1e293b;
-  padding: 10px 16px;
+  padding: 8px 14px;
   border-radius: 8px;
   color: #cbd5f5;
-  transition: 0.3s;
 }
 
-.back-btn:hover {
+.back-link:hover {
   background: #0ea5e9;
   color: white;
 }
 
 /* Cards */
-.question-card {
+.qa-item {
   background: #1e293b;
-  margin-bottom: 20px;
-  padding: 20px;
   border-radius: 12px;
+  margin-bottom: 15px;
+  overflow: hidden;
   transition: 0.3s;
 }
 
-.question-card:hover {
+.qa-item:hover {
   transform: translateY(-3px);
 }
 
-/* Question number */
-.q-number {
-  background: #0ea5e9;
+/* Question button */
+.question-btn {
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  border: none;
+  background: transparent;
   color: white;
-}
-
-/* Table info */
-.table-info {
-  color: #94a3b8;
-}
-
-/* Answer section */
-details {
-  margin-top: 15px;
-}
-
-summary {
-  background: #020617;
-  color: #cbd5f5;
-  padding: 10px;
-  border-radius: 6px;
   cursor: pointer;
 }
 
-.answer-content {
+/* Number */
+.number-badge {
+  background: #0ea5e9;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  font-weight: bold;
+}
+
+/* Text */
+.question-text {
+  flex: 1;
+  font-size: 15px;
+}
+
+/* Arrow */
+.arrow-icon {
+  color: #94a3b8;
+  transition: 0.3s;
+}
+
+/* Answer */
+.answer-panel {
+  background: #020617;
+}
+
+.answer-inner {
+  padding: 15px 20px 20px 60px;
+}
+
+pre {
   background: #020617;
   color: #38bdf8;
-  padding: 15px;
+  padding: 12px;
   border-radius: 8px;
   font-family: monospace;
-  white-space: pre-wrap;
+}
+
+/* Active state */
+.qa-item.active .arrow-icon {
+  transform: rotate(90deg);
+  color: #38bdf8;
 }
     </style>
   </head>
