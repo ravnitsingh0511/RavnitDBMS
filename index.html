@@ -1,636 +1,641 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Database Management System</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg: #0c0e12;
-      --bg2: #12151b;
-      --bg3: #181c24;
-      --border: rgba(255,255,255,0.07);
-      --border-hover: rgba(255,255,255,0.15);
-      --accent: #4f8ef7;
-      --accent-dim: rgba(79,142,247,0.12);
-      --accent-border: rgba(79,142,247,0.35);
-      --text-primary: #eef0f4;
-      --text-secondary: #7a8096;
-      --text-tertiary: #3e4455;
-      --mono: 'JetBrains Mono', monospace;
-      --display: 'Syne', sans-serif;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--text-primary);
-      font-family: var(--mono);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* ── grid bg ── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-      background-size: 48px 48px;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* ── glow orb ── */
-    body::after {
-      content: '';
-      position: fixed;
-      top: -200px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 700px;
-      height: 500px;
-      background: radial-gradient(ellipse, rgba(79,142,247,0.07) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .wrap {
-      position: relative;
-      z-index: 1;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 3rem 2rem 6rem;
-    }
-
-    /* ── header ── */
-    header { margin-bottom: 3rem; }
-
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-family: var(--mono);
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--accent);
-      background: var(--accent-dim);
-      border: 1px solid var(--accent-border);
-      border-radius: 4px;
-      padding: 4px 12px;
-      margin-bottom: 20px;
-      animation: fadeUp 0.5s ease both;
-    }
-    .tag::before {
-      content: '';
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
-      animation: pulse 2s infinite;
-    }
-
-    h1 {
-      font-family: var(--display);
-      font-size: clamp(2rem, 5vw, 3.4rem);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      line-height: 1.1;
-      color: var(--text-primary);
-      margin-bottom: 10px;
-      animation: fadeUp 0.5s 0.08s ease both;
-    }
-
-    .subtitle {
-      font-size: 12px;
-      color: var(--text-secondary);
-      letter-spacing: 0.04em;
-      animation: fadeUp 0.5s 0.15s ease both;
-    }
-    .subtitle span { color: var(--accent); }
-
-    /* ── stats ── */
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap: 12px;
-      margin-bottom: 3rem;
-      animation: fadeUp 0.5s 0.2s ease both;
-    }
-
-    .stat {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 18px 20px;
-      transition: border-color 0.2s;
-    }
-    .stat:hover { border-color: var(--border-hover); }
-
-    .stat-label {
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-tertiary);
-      margin-bottom: 8px;
-    }
-    .stat-value {
-      font-family: var(--display);
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--text-primary);
-      line-height: 1;
-    }
-    .stat-value.accent { color: var(--accent); }
-
-    /* ── section ── */
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 14px;
-      animation: fadeUp 0.5s 0.25s ease both;
-    }
-    .section-label {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--text-tertiary);
-    }
-    .section-line {
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    /* ── grid ── */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 10px;
-    }
-
-    /* ── card ── */
-    .card {
-      display: block;
-      text-decoration: none;
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 18px 20px;
-      position: relative;
-      overflow: hidden;
-      transition: border-color 0.2s, background 0.2s, transform 0.2s;
-      opacity: 0;
-      animation: fadeUp 0.45s ease forwards;
-    }
-    .card:hover {
-      border-color: var(--border-hover);
-      background: var(--bg3);
-      transform: translateY(-2px);
-    }
-
-    .card::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 12px;
-      background: radial-gradient(600px circle at var(--mx,50%) var(--my,50%), rgba(79,142,247,0.05), transparent 40%);
-      opacity: 0;
-      transition: opacity 0.3s;
-      pointer-events: none;
-    }
-    .card:hover::after { opacity: 1; }
-
-    /* left accent stripe */
-    .card::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 16px; bottom: 16px;
-      width: 2px;
-      border-radius: 0 2px 2px 0;
-      background: var(--accent);
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-    .card:hover::before { opacity: 0.5; }
-    .card.featured::before { opacity: 1; }
-
-    .card.featured {
-      border-color: var(--accent-border);
-      background: linear-gradient(135deg, var(--bg2) 0%, rgba(79,142,247,0.05) 100%);
-    }
-    .card.featured:hover {
-      border-color: rgba(79,142,247,0.6);
-    }
-
-    .card-top {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .card-num {
-      font-size: 10px;
-      font-weight: 500;
-      color: var(--text-tertiary);
-      letter-spacing: 0.06em;
-      padding-top: 2px;
-      min-width: 22px;
-    }
-
-    .card-title {
-      font-family: var(--mono);
-      font-size: 12.5px;
-      font-weight: 500;
-      color: var(--text-primary);
-      line-height: 1.55;
-      flex: 1;
-    }
-    .card.featured .card-title { color: #93bafb; }
-
-    .arrow {
-      font-size: 14px;
-      color: var(--text-tertiary);
-      transition: color 0.2s, transform 0.2s;
-      padding-top: 1px;
-    }
-    .card:hover .arrow {
-      color: var(--accent);
-      transform: translateX(2px);
-    }
-
-    .card-foot {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-
-    .count {
-      font-size: 10px;
-      color: var(--text-tertiary);
-      letter-spacing: 0.04em;
-    }
-
-    .badge {
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      padding: 2px 9px;
-      border-radius: 99px;
-      background: var(--bg3);
-      color: var(--text-tertiary);
-      border: 1px solid var(--border);
-    }
-    .card.featured .badge {
-      background: var(--accent-dim);
-      color: var(--accent);
-      border-color: var(--accent-border);
-    }
-
-    .progress-track {
-      height: 2px;
-      background: rgba(255,255,255,0.05);
-      border-radius: 99px;
-      overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%;
-      width: 0%;
-      background: var(--accent);
-      border-radius: 99px;
-    }
-    .card.featured .progress-fill { background: #93bafb; }
-
-    /* ── animations ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(14px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0.3; }
-    }
-
-    /* stagger cards */
-    .card:nth-child(1)  { animation-delay: 0.05s; }
-    .card:nth-child(2)  { animation-delay: 0.10s; }
-    .card:nth-child(3)  { animation-delay: 0.13s; }
-    .card:nth-child(4)  { animation-delay: 0.16s; }
-    .card:nth-child(5)  { animation-delay: 0.19s; }
-    .card:nth-child(6)  { animation-delay: 0.22s; }
-    .card:nth-child(7)  { animation-delay: 0.25s; }
-    .card:nth-child(8)  { animation-delay: 0.28s; }
-    .card:nth-child(9)  { animation-delay: 0.31s; }
-    .card:nth-child(10) { animation-delay: 0.34s; }
-    .card:nth-child(11) { animation-delay: 0.37s; }
-    .card:nth-child(12) { animation-delay: 0.40s; }
-    .card:nth-child(13) { animation-delay: 0.43s; }
-    .card:nth-child(14) { animation-delay: 0.46s; }
-    .card:nth-child(15) { animation-delay: 0.49s; }
-    .card:nth-child(16) { animation-delay: 0.52s; }
-    .card:nth-child(17) { animation-delay: 0.55s; }
-    .card:nth-child(18) { animation-delay: 0.58s; }
-
-    @media (max-width: 600px) {
-      .wrap { padding: 2rem 1.2rem 4rem; }
-      .grid { grid-template-columns: 1fr; }
-      .stats { grid-template-columns: repeat(3, minmax(0,1fr)); }
-      .stat-value { font-size: 22px; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Mastery Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="cosmic-bg"></div>
+    
+    <header class="hero-section">
+        <div class="glitch-wrapper">
+            <h1 class="main-title glitch" data-text="SQL MASTERY HUB">SQL MASTERY HUB</h1>
+        </div>
+        <div class="subtitle-container">
+            <p class="subtitle">Master Database Commands Through Interactive Practice</p>
+            <div class="pulse-line"></div>
+        </div>
+    </header>
 
-<div class="wrap">
-  <header>
-    <div class="tag">Study Dashboard</div>
-    <h1>Database Management<br>System</h1>
-    <p class="subtitle"><span>18 modules</span> &nbsp;·&nbsp; 671 practice problems</p>
-  </header>
+    <main class="main-container">
+        <div class="grid-container">
+            
+            <div class="module-card neon-purple" data-module="ddl">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="4" rx="1"/>
+                            <rect x="3" y="9" width="18" height="4" rx="1"/>
+                            <rect x="3" y="15" width="18" height="4" rx="1"/>
+                        </svg>
+                    </div>
+                    <div class="module-info">
+                        <h3 class="module-title">DDL Commands</h3>
+                        <p class="module-desc">Data Definition Language</p>
+                        <div class="stats">
+                            <span class="challenge-count">50 Challenges</span>
+                            <div class="difficulty-indicator">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-ring">
+                        <svg class="progress-svg" width="60" height="60">
+                            <circle class="progress-bg" cx="30" cy="30" r="25"></circle>
+                            <circle class="progress-fill" cx="30" cy="30" r="25"></circle>
+                        </svg>
+                        <span class="progress-text">0%</span>
+                    </div>
+                </div>
+                <div class="card-hover-effect"></div>
+                <a href="first.html" class="card-link"></a>
+            </div>
 
-  <div class="stats">
-    <div class="stat">
-      <div class="stat-label">Modules</div>
-      <div class="stat-value">18</div>
-    </div>
-    <div class="stat">
-      <div class="stat-label">Problems</div>
-      <div class="stat-value">671</div>
-    </div>
-    <div class="stat">
-      <div class="stat-label">Progress</div>
-      <div class="stat-value accent">0%</div>
-    </div>
-  </div>
+            <div class="module-card neon-blue" data-module="dml">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
+                        </svg>
+                    </div>
+                    <div class="module-info">
+                        <h3 class="module-title">DML Commands</h3>
+                        <p class="module-desc">Data Manipulation Language</p>
+                        <div class="stats">
+                            <span class="challenge-count">30 Challenges</span>
+                            <div class="difficulty-indicator">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-ring">
+                        <svg class="progress-svg" width="60" height="60">
+                            <circle class="progress-bg" cx="30" cy="30" r="25"></circle>
+                            <circle class="progress-fill" cx="30" cy="30" r="25"></circle>
+                        </svg>
+                        <span class="progress-text">0%</span>
+                    </div>
+                </div>
+                <div class="card-hover-effect"></div>
+                <a href="second.html" class="card-link"></a>
+            </div>
 
-  <div class="section-header">
-    <span class="section-label">All modules</span>
-    <div class="section-line"></div>
-  </div>
+            <div class="module-card neon-green" data-module="dml-interview">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                    </div>
+                    <div class="module-info">
+                        <h3 class="module-title">DML Interview</h3>
+                        <p class="module-desc">Real-world Questions</p>
+                        <div class="stats">
+                            <span class="challenge-count">20 Challenges</span>
+                            <div class="difficulty-indicator">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-ring">
+                        <svg class="progress-svg" width="60" height="60">
+                            <circle class="progress-bg" cx="30" cy="30" r="25"></circle>
+                            <circle class="progress-fill" cx="30" cy="30" r="25"></circle>
+                        </svg>
+                        <span class="progress-text">0%</span>
+                    </div>
+                </div>
+                <div class="card-hover-effect"></div>
+                <a href="third.html" class="card-link"></a>
+            </div>
 
-  <div class="grid" id="grid">
+            <div class="module-card neon-pink" data-module="dql">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                    </div>
+                    <div class="module-info">
+                        <h3 class="module-title">DQL: SELECT</h3>
+                        <p class="module-desc">Data Query Language</p>
+                        <div class="stats">
+                            <span class="challenge-count">10 Challenges</span>
+                            <div class="difficulty-indicator">
+                                <span class="dot"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-ring">
+                        <svg class="progress-svg" width="60" height="60">
+                            <circle class="progress-bg" cx="30" cy="30" r="25"></circle>
+                            <circle class="progress-fill" cx="30" cy="30" r="25"></circle>
+                        </svg>
+                        <span class="progress-text">0%</span>
+                    </div>
+                </div>
+                <div class="card-hover-effect"></div>
+                <a href="fourth.html" class="card-link"></a>
+            </div>
 
-    <a href="first.html" class="card">
-      <div class="card-top">
-        <span class="card-num">01</span>
-        <span class="card-title">Data Definition Language (DDL) Commands</span>
-        <span class="arrow">›</span>
-      </div>
-      <div class="card-foot">
-        <span class="count">50 problems</span>
-        <span class="badge">Not started</span>
-      </div>
-      <div class="progress-track"><div class="progress-fill"></div></div>
-    </a>
+            <div class="module-card neon-orange" data-module="clauses">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 6h18"/>
+                            <path d="M7 12h10"/>
+                            <path d="M10 18h4"/>
+                        </svg>
+                    </div>
+                    <div class="module-info">
+                        <h3 class="module-title">WHERE & ORDER BY</h3>
+                        <p class="module-desc">Filtering & Sorting</p>
+                        <div class="stats">
+                            <span class="challenge-count">54 Challenges</span>
+                            <div class="difficulty-indicator">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-ring">
+                        <svg class="progress-svg" width="60" height="60">
+                            <circle class="progress-bg" cx="30" cy="30" r="25"></circle>
+                            <circle class="progress-fill" cx="30" cy="30" r="25"></circle>
+                        </svg>
+                        <span class="progress-text">0%</span>
+                    </div>
+                </div>
+                <div class="card-hover-effect"></div>
+                <a href="fifth.html" class="card-link"></a>
+            </div>
 
-    <a href="second.html" class="card">
-      <div class="card-top">
-        <span class="card-num">02</span>
-        <span class="card-title">Data Manipulation Language (DML) Commands</span>
-        <span class="arrow">›</span>
-      </div>
-      <div class="card-foot">
-        <span class="count">30 problems</span>
-        <span class="badge">Not started</span>
-      </div>
-      <div class="progress-track"><div class="progress-fill"></div></div>
-    </a>
+            <div class="module-card neon-cyan" data-module="like">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                            <rect x="2" y="9" width="4" height="12"/>
+                            <circle cx="4" cy="4" r="2"/>
+                        </svg>
+                    </div>
+                    <div class="module-info">
+                        <h3 class="module-title">LIKE Operator</h3>
+                        <p class="module-desc">Pattern Matching</p>
+                        <div class="stats">
+                            <span class="challenge-count">60 Challenges</span>
+                            <div class="difficulty-indicator">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-ring">
+                        <svg class="progress-svg" width="60" height="60">
+                            <circle class="progress-bg" cx="30" cy="30" r="25"></circle>
+                            <circle class="progress-fill" cx="30" cy="30" r="25"></circle>
+                        </svg>
+                        <span class="progress-text">0%</span>
+                    </div>
+                </div>
+                <div class="card-hover-effect"></div>
+                <a href="sixth.html" class="card-link"></a>
+            </div>
 
-    <a href="third.html" class="card">
-      <div class="card-top">
-        <span class="card-num">03</span>
-        <span class="card-title">Interview Questions: DML Commands</span>
-        <span class="arrow">›</span>
-      </div>
-      <div class="card-foot">
-        <span class="count">20 problems</span>
-        <span class="badge">Not started</span>
-      </div>
-      <div class="progress-track"><div class="progress-fill"></div></div>
-    </a>
+            <div class="module-card neon-red" data-module="group-functions">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <div class="module-info">
+                        <h3 class="module-title">Group Functions</h3>
+                        <p class="module-desc">GROUP BY & HAVING</p>
+                        <div class="stats">
+                            <span class="challenge-count">50 Challenges</span>
+                            <div class="difficulty-indicator">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-ring">
+                        <svg class="progress-svg" width="60" height="60">
+                            <circle class="progress-bg" cx="30" cy="30" r="25"></circle>
+                            <circle class="progress-fill" cx="30" cy="30" r="25"></circle>
+                        </svg>
+                        <span class="progress-text">0%</span>
+                    </div>
+                </div>
+                <div class="card-hover-effect"></div>
+                <a href="seventh.html" class="card-link"></a>
+            </div>
 
-    <a href="fourth.html" class="card">
-      <div class="card-top">
-        <span class="card-num">04</span>
-        <span class="card-title">Data Query Language (DQL): SELECT</span>
-        <span class="arrow">›</span>
-      </div>
-      <div class="card-foot">
-        <span class="count">10 problems</span>
-        <span class="badge">Not started</span>
-      </div>
-      <div class="progress-track"><div class="progress-fill"></div></div>
-    </a>
+            <div class="module-card golden-glow" data-module="subqueries">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                        </svg>
+                    </div>
+                    <div class="module-info">
+                        <h3 class="module-title">Subqueries</h3>
+                        <p class="module-desc">Nested Queries Master</p>
+                        <div class="stats">
+                            <span class="challenge-count premium">69 Challenges</span>
+                            <div class="difficulty-indicator">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-ring">
+                        <svg class="progress-svg" width="60" height="60">
+                            <circle class="progress-bg" cx="30" cy="30" r="25"></circle>
+                            <circle class="progress-fill" cx="30" cy="30" r="25"></circle>
+                        </svg>
+                        <span class="progress-text">0%</span>
+                    </div>
+                </div>
+                <div class="card-hover-effect"></div>
+                <a href="eigth.html" class="card-link"></a>
+            </div>
 
-    <a href="fifth.html" class="card">
-      <div class="card-top">
-        <span class="card-num">05</span>
-        <span class="card-title">Where Clause, Order By and Alias</span>
-        <span class="arrow">›</span>
-      </div>
-      <div class="card-foot">
-        <span class="count">54 problems</span>
-        <span class="badge">Not started</span>
-      </div>
-      <div class="progress-track"><div class="progress-fill"></div></div>
-    </a>
+            <div class="module-card neon-purple" data-module="subquery-interview">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                        </svg>
+                    </div>
+                    <div class="module-info">
+                        <h3 class="module-title">Subquery Interview</h3>
+                        <p class="module-desc">Advanced Questions</p>
+                        <div class="stats">
+                            <span class="challenge-count">24 Challenges</span>
+                            <div class="difficulty-indicator">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-ring">
+                        <svg class="progress-svg" width="60" height="60">
+                            <circle class="progress-bg" cx="30" cy="30" r="25"></circle>
+                            <circle class="progress-fill" cx="30" cy="30" r="25"></circle>
+                        </svg>
+                        <span class="progress-text">0%</span>
+                    </div>
+                </div>
+                <div class="card-hover-effect"></div>
+                <a href="nineth.html" class="card-link"></a>
+            </div>
 
-    <a href="sixth.html" class="card">
-      <div class="card-top">
-        <span class="card-num">06</span>
-        <span class="card-title">Pattern Matching Operator (LIKE)</span>
-        <span class="arrow">›</span>
-      </div>
-      <div class="card-foot">
-        <span class="count">60 problems</span>
-        <span class="badge">Not started</span>
-      </div>
-      <div class="progress-track"><div class="progress-fill"></div></div>
-    </a>
+            <div class="module-card neon-blue" data-module="functions">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                        </svg>
+                    </div>
+                    <div class="module-info">
+                        <h3 class="module-title">Scalar Functions</h3>
+                        <p class="module-desc">Date, Numeric & String</p>
+                        <div class="stats">
+                            <span class="challenge-count">60 Challenges</span>
+                            <div class="difficulty-indicator">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-ring">
+                        <svg class="progress-svg" width="60" height="60">
+                            <circle class="progress-bg" cx="30" cy="30" r="25"></circle>
+                            <circle class="progress-fill" cx="30" cy="30" r="25"></circle>
+                        </svg>
+                        <span class="progress-text">0%</span>
+                    </div>
+                </div>
+                <div class="card-hover-effect"></div>
+                <a href="tenth.html" class="card-link"></a>
+            </div>
 
-    <a href="seventh.html" class="card">
-      <div class="card-top">
-        <span class="card-num">07</span>
-        <span class="card-title">Group Functions, Group By Clause, Having Clause</span>
-        <span class="arrow">›</span>
-      </div>
-      <div class="card-foot">
-        <span class="count">50 problems</span>
-        <span class="badge">Not started</span>
-      </div>
-      <div class="progress-track"><div class="progress-fill"></div></div>
-    </a>
+            <div class="module-card neon-green" data-module="joins">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                            <rect x="2" y="9" width="4" height="12"/>
+                            <circle cx="4" cy="4" r="2"/>
+                        </svg>
+                    </div>
+                    <div class="module-info">
+                        <h3 class="module-title">JOIN Operations</h3>
+                        <p class="module-desc">Inner, Outer & Cross</p>
+                        <div class="stats">
+                            <span class="challenge-count">40 Challenges</span>
+                            <div class="difficulty-indicator">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-ring">
+                        <svg class="progress-svg" width="60" height="60">
+                            <circle class="progress-bg" cx="30" cy="30" r="25"></circle>
+                            <circle class="progress-fill" cx="30" cy="30" r="25"></circle>
+                        </svg>
+                        <span class="progress-text">0%</span>
+                    </div>
+                </div>
+                <div class="card-hover-effect"></div>
+                <a href="eleventh.html" class="card-link"></a>
+            </div>
 
-    <a href="eigth.html" class="card featured">
-      <div class="card-top">
-        <span class="card-num">08</span>
-        <span class="card-title">Subqueries: Single Row, Multiple Row, Correlated Subquery</span>
-        <span class="arrow">›</span>
-      </div>
-      <div class="card-foot">
-        <span class="count">69 problems</span>
-        <span class="badge">Not started</span>
-      </div>
-      <div class="progress-track"><div class="progress-fill"></div></div>
-    </a>
+            <div class="module-card neon-pink" data-module="join-interview">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
+                        </svg>
+                    </div>
+                    <div class="module-info">
+                        <h3 class="module-title">JOIN Interview</h3>
+                        <p class="module-desc">Complex Queries</p>
+                        <div class="stats">
+                            <span class="challenge-count">24 Challenges</span>
+                            <div class="difficulty-indicator">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-ring">
+                        <svg class="progress-svg" width="60" height="60">
+                            <circle class="progress-bg" cx="30" cy="30" r="25"></circle>
+                            <circle class="progress-fill" cx="30" cy="30" r="25"></circle>
+                        </svg>
+                        <span class="progress-text">0%</span>
+                    </div>
+                </div>
+                <div class="card-hover-effect"></div>
+                <a href="twelfth.html" class="card-link"></a>
+            </div>
 
-    <a href="nineth.html" class="card">
-      <div class="card-top">
-        <span class="card-num">09</span>
-        <span class="card-title">Interview Questions: Subqueries</span>
-        <span class="arrow">›</span>
-      </div>
-      <div class="card-foot">
-        <span class="count">24 problems</span>
-        <span class="badge">Not started</span>
-      </div>
-      <div class="progress-track"><div class="progress-fill"></div></div>
-    </a>
+            <div class="module-card neon-orange" data-module="set-operators">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7"/>
+                            <rect x="14" y="3" width="7" height="7"/>
+                            <rect x="14" y="14" width="7" height="7"/>
+                            <rect x="3" y="14" width="7" height="7"/>
+                        </svg>
+                    </div>
+                    <div class="module-info">
+                        <h3 class="module-title">Set Operators</h3>
+                        <p class="module-desc">UNION, INTERSECT, MINUS</p>
+                        <div class="stats">
+                            <span class="challenge-count">25 Challenges</span>
+                            <div class="difficulty-indicator">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-ring">
+                        <svg class="progress-svg" width="60" height="60">
+                            <circle class="progress-bg" cx="30" cy="30" r="25"></circle>
+                            <circle class="progress-fill" cx="30" cy="30" r="25"></circle>
+                        </svg>
+                        <span class="progress-text">0%</span>
+                    </div>
+                </div>
+                <div class="card-hover-effect"></div>
+                <a href="thirteen.html" class="card-link"></a>
+            </div>
 
-    <a href="tenth.html" class="card">
-      <div class="card-top">
-        <span class="card-num">10</span>
-        <span class="card-title">Scalar Functions: Date, Numeric, String, Conversion, General &amp; Null</span>
-        <span class="arrow">›</span>
-      </div>
-      <div class="card-foot">
-        <span class="count">60 problems</span>
-        <span class="badge">Not started</span>
-      </div>
-      <div class="progress-track"><div class="progress-fill"></div></div>
-    </a>
+            <div class="module-card neon-cyan" data-module="views">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </div>
+                    <div class="module-info">
+                        <h3 class="module-title">Views</h3>
+                        <p class="module-desc">Virtual Tables</p>
+                        <div class="stats">
+                            <span class="challenge-count">35 Challenges</span>
+                            <div class="difficulty-indicator">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-ring">
+                        <svg class="progress-svg" width="60" height="60">
+                            <circle class="progress-bg" cx="30" cy="30" r="25"></circle>
+                            <circle class="progress-fill" cx="30" cy="30" r="25"></circle>
+                        </svg>
+                        <span class="progress-text">0%</span>
+                    </div>
+                </div>
+                <div class="card-hover-effect"></div>
+                <a href="fourteen.html" class="card-link"></a>
+            </div>
 
-    <a href="eleventh.html" class="card">
-      <div class="card-top">
-        <span class="card-num">11</span>
-        <span class="card-title">Joins: Inner, Cartesian/Cross, Left Outer, Right Outer, Full Outer</span>
-        <span class="arrow">›</span>
-      </div>
-      <div class="card-foot">
-        <span class="count">40 problems</span>
-        <span class="badge">Not started</span>
-      </div>
-      <div class="progress-track"><div class="progress-fill"></div></div>
-    </a>
+            <div class="module-card neon-red" data-module="tcl-dcl">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                    </div>
+                    <div class="module-info">
+                        <h3 class="module-title">TCL & DCL</h3>
+                        <p class="module-desc">Transaction & Control</p>
+                        <div class="stats">
+                            <span class="challenge-count">35 Challenges</span>
+                            <div class="difficulty-indicator">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-ring">
+                        <svg class="progress-svg" width="60" height="60">
+                            <circle class="progress-bg" cx="30" cy="30" r="25"></circle>
+                            <circle class="progress-fill" cx="30" cy="30" r="25"></circle>
+                        </svg>
+                        <span class="progress-text">0%</span>
+                    </div>
+                </div>
+                <div class="card-hover-effect"></div>
+                <a href="fifteen.html" class="card-link"></a>
+            </div>
 
-    <a href="twelfth.html" class="card">
-      <div class="card-top">
-        <span class="card-num">12</span>
-        <span class="card-title">Interview Questions: Joins</span>
-        <span class="arrow">›</span>
-      </div>
-      <div class="card-foot">
-        <span class="count">24 problems</span>
-        <span class="badge">Not started</span>
-      </div>
-      <div class="progress-track"><div class="progress-fill"></div></div>
-    </a>
+            <div class="module-card neon-purple" data-module="plsql-basics">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                        </svg>
+                    </div>
+                    <div class="module-info">
+                        <h3 class="module-title">PL/SQL Basics</h3>
+                        <p class="module-desc">Variables & Datatypes</p>
+                        <div class="stats">
+                            <span class="challenge-count">22 Challenges</span>
+                            <div class="difficulty-indicator">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-ring">
+                        <svg class="progress-svg" width="60" height="60">
+                            <circle class="progress-bg" cx="30" cy="30" r="25"></circle>
+                            <circle class="progress-fill" cx="30" cy="30" r="25"></circle>
+                        </svg>
+                        <span class="progress-text">0%</span>
+                    </div>
+                </div>
+                <div class="card-hover-effect"></div>
+                <a href="sixteen.html" class="card-link"></a>
+            </div>
 
-    <a href="thirteen.html" class="card">
-      <div class="card-top">
-        <span class="card-num">13</span>
-        <span class="card-title">Set Operators: Union, Union All, Intersect, Minus</span>
-        <span class="arrow">›</span>
-      </div>
-      <div class="card-foot">
-        <span class="count">25 problems</span>
-        <span class="badge">Not started</span>
-      </div>
-      <div class="progress-track"><div class="progress-fill"></div></div>
-    </a>
+            <div class="module-card neon-blue" data-module="plsql-control">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                            <path d="M2 17l10 5 10-5"/>
+                            <path d="M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <div class="module-info">
+                        <h3 class="module-title">Control Statements</h3>
+                        <p class="module-desc">IF, CASE, CONDITIONS</p>
+                        <div class="stats">
+                            <span class="challenge-count">31 Challenges</span>
+                            <div class="difficulty-indicator">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-ring">
+                        <svg class="progress-svg" width="60" height="60">
+                            <circle class="progress-bg" cx="30" cy="30" r="25"></circle>
+                            <circle class="progress-fill" cx="30" cy="30" r="25"></circle>
+                        </svg>
+                        <span class="progress-text">0%</span>
+                    </div>
+                </div>
+                <div class="card-hover-effect"></div>
+                <a href="seventeen.html" class="card-link"></a>
+            </div>
 
-    <a href="fourteen.html" class="card">
-      <div class="card-top">
-        <span class="card-num">14</span>
-        <span class="card-title">Views: Create, Drop, Materialized</span>
-        <span class="arrow">›</span>
-      </div>
-      <div class="card-foot">
-        <span class="count">35 problems</span>
-        <span class="badge">Not started</span>
-      </div>
-      <div class="progress-track"><div class="progress-fill"></div></div>
-    </a>
+            <div class="module-card neon-green" data-module="plsql-loops">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="module-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </div>
+                    <div class="module-info">
+                        <h3 class="module-title">Loop Statements</h3>
+                        <p class="module-desc">FOR, WHILE, LOOP</p>
+                        <div class="stats">
+                            <span class="challenge-count">32 Challenges</span>
+                            <div class="difficulty-indicator">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-ring">
+                        <svg class="progress-svg" width="60" height="60">
+                            <circle class="progress-bg" cx="30" cy="30" r="25"></circle>
+                            <circle class="progress-fill" cx="30" cy="30" r="25"></circle>
+                        </svg>
+                        <span class="progress-text">0%</span>
+                    </div>
+                </div>
+                <div class="card-hover-effect"></div>
+                <a href="eighteen.html" class="card-link"></a>
+            </div>
 
-    <a href="fifteen.html" class="card">
-      <div class="card-top">
-        <span class="card-num">15</span>
-        <span class="card-title">Transaction Control Language (TCL) and Data Control Language (DCL)</span>
-        <span class="arrow">›</span>
-      </div>
-      <div class="card-foot">
-        <span class="count">35 problems</span>
-        <span class="badge">Not started</span>
-      </div>
-      <div class="progress-track"><div class="progress-fill"></div></div>
-    </a>
+        </div>
+    </main>
 
-    <a href="sixteen.html" class="card">
-      <div class="card-top">
-        <span class="card-num">16</span>
-        <span class="card-title">PL/SQL: Output Statement, Datatypes, Variables, Constants</span>
-        <span class="arrow">›</span>
-      </div>
-      <div class="card-foot">
-        <span class="count">22 problems</span>
-        <span class="badge">Not started</span>
-      </div>
-      <div class="progress-track"><div class="progress-fill"></div></div>
-    </a>
-
-    <a href="seventeen.html" class="card">
-      <div class="card-top">
-        <span class="card-num">17</span>
-        <span class="card-title">PL/SQL: Decision Control — IF, IF-ELSE, IF-ELSIF-ELSE, CASE</span>
-        <span class="arrow">›</span>
-      </div>
-      <div class="card-foot">
-        <span class="count">31 problems</span>
-        <span class="badge">Not started</span>
-      </div>
-      <div class="progress-track"><div class="progress-fill"></div></div>
-    </a>
-
-    <a href="eighteen.html" class="card">
-      <div class="card-top">
-        <span class="card-num">18</span>
-        <span class="card-title">PL/SQL: Iterative Control — Simple Loop, While Loop, For Loop</span>
-        <span class="arrow">›</span>
-      </div>
-      <div class="card-foot">
-        <span class="count">32 problems</span>
-        <span class="badge">Not started</span>
-      </div>
-      <div class="progress-track"><div class="progress-fill"></div></div>
-    </a>
-
-  </div>
-</div>
-
-<script>
-  // mouse glow effect on cards
-  document.querySelectorAll('.card').forEach(card => {
-    card.addEventListener('mousemove', e => {
-      const r = card.getBoundingClientRect();
-      card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
-      card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
-    });
-  });
-</script>
-
+    <footer class="footer">
+        <div class="footer-content">
+            <p>© 2024 SQL Mastery Hub - Become a Database Expert</p>
+            <div class="social-links">
+                <span class="social-icon">GitHub</span>
+                <span class="social-icon">LinkedIn</span>
+                <span class="social-icon">Twitter</span>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
