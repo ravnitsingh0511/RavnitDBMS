@@ -18,17 +18,18 @@ body {
   padding: 20px;
 }
 
-.container {
+/* Center layout */
+body > * {
   max-width: 1000px;
   margin: auto;
 }
 
 /* Header */
-h1 {
+.header, h1 {
   margin-bottom: 20px;
 }
 
-.back-link {
+.back-btn, .back-link {
   display: inline-block;
   margin-bottom: 20px;
   text-decoration: none;
@@ -36,84 +37,98 @@ h1 {
   padding: 8px 14px;
   border-radius: 8px;
   color: #cbd5f5;
+  transition: 0.3s;
 }
 
-.back-link:hover {
+.back-btn:hover, .back-link:hover {
   background: #0ea5e9;
   color: white;
 }
 
-/* Cards */
+/* ===== CARDS (WORKS FOR BOTH TYPES) ===== */
+
+.question-card,
 .qa-item {
   background: #1e293b;
+  margin-bottom: 20px;
+  padding: 20px;
   border-radius: 12px;
-  margin-bottom: 15px;
-  overflow: hidden;
   transition: 0.3s;
 }
 
+.question-card:hover,
 .qa-item:hover {
   transform: translateY(-3px);
 }
 
-/* Question button */
+/* ===== NUMBER ===== */
+
+.q-number,
+.number-badge {
+  background: #0ea5e9;
+  color: white;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+/* ===== TEXT ===== */
+
+.q-text,
+.question-text {
+  font-size: 15px;
+}
+
+/* ===== BUTTON STYLE (DDL) ===== */
+
 .question-btn {
   width: 100%;
-  padding: 20px;
   display: flex;
   align-items: center;
-  border: none;
   background: transparent;
+  border: none;
   color: white;
   cursor: pointer;
 }
 
-/* Number */
-.number-badge {
-  background: #0ea5e9;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 15px;
-  font-weight: bold;
+/* ===== ANSWERS ===== */
+
+details {
+  margin-top: 15px;
 }
 
-/* Text */
-.question-text {
-  flex: 1;
-  font-size: 15px;
+summary {
+  background: #020617;
+  color: #cbd5f5;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.answer-content,
+.answer-panel,
+pre {
+  background: #020617;
+  color: #38bdf8;
+  padding: 15px;
+  border-radius: 8px;
+  font-family: monospace;
+  white-space: pre-wrap;
+}
+
+/* Fix DDL spacing */
+.answer-inner {
+  padding-left: 0;
 }
 
 /* Arrow */
 .arrow-icon {
   color: #94a3b8;
-  transition: 0.3s;
-}
-
-/* Answer */
-.answer-panel {
-  background: #020617;
-}
-
-.answer-inner {
-  padding: 15px 20px 20px 60px;
-}
-
-pre {
-  background: #020617;
-  color: #38bdf8;
-  padding: 12px;
-  border-radius: 8px;
-  font-family: monospace;
-}
-
-/* Active state */
-.qa-item.active .arrow-icon {
-  transform: rotate(90deg);
-  color: #38bdf8;
 }
     </style>
   </head>
