@@ -1,193 +1,636 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Database Management System</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <h1 class="title">Database Management System</h1>
-    <div class="container">
-      <a href="first.html" class="card">
-        <div class="card-header">
-          <h2>Data Defination Language (DDL) Commands</h2>
-          <span class="arrow">&rsaquo;</span>
-        </div>
-        <p class="count">50 practice problems</p>
-        <div class="progress-bg"><div class="progress-bar"></div></div>
-        <span class="status">Not started</span>
-      </a>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Database Management System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-      <a href="second.html" class="card">
-        <div class="card-header">
-          <h2>Data Manipulation Language (DML) Commands</h2>
-          <span class="arrow">&rsaquo;</span>
-        </div>
-        <p class="count">30 practice problems</p>
-        <div class="progress-bg"><div class="progress-bar"></div></div>
-        <span class="status">Not started</span>
-      </a>
+    :root {
+      --bg: #0c0e12;
+      --bg2: #12151b;
+      --bg3: #181c24;
+      --border: rgba(255,255,255,0.07);
+      --border-hover: rgba(255,255,255,0.15);
+      --accent: #4f8ef7;
+      --accent-dim: rgba(79,142,247,0.12);
+      --accent-border: rgba(79,142,247,0.35);
+      --text-primary: #eef0f4;
+      --text-secondary: #7a8096;
+      --text-tertiary: #3e4455;
+      --mono: 'JetBrains Mono', monospace;
+      --display: 'Syne', sans-serif;
+    }
 
-      <a href="third.html" class="card">
-        <div class="card-header">
-          <h2>Interview Questions: DML Commands</h2>
-          <span class="arrow">&rsaquo;</span>
-        </div>
-        <p class="count">20 practice problems</p>
-        <div class="progress-bg"><div class="progress-bar"></div></div>
-        <span class="status">Not started</span>
-      </a>
+    html { scroll-behavior: smooth; }
 
-      <a href="fourth.html" class="card">
-        <div class="card-header">
-          <h2>Data Query Language (DQL): SELECT</h2>
-          <span class="arrow">&rsaquo;</span>
-        </div>
-        <p class="count">10 practice problems</p>
-        <div class="progress-bg"><div class="progress-bar"></div></div>
-        <span class="status">Not started</span>
-      </a>
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: var(--mono);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-      <a href="fifth.html" class="card">
-        <div class="card-header">
-          <h2>Where Clause, Order By and Alias</h2>
-          <span class="arrow">&rsaquo;</span>
-        </div>
-        <p class="count">54 practice problems</p>
-        <div class="progress-bg"><div class="progress-bar"></div></div>
-        <span class="status">Not started</span>
-      </a>
+    /* ── grid bg ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
 
-      <a href="sixth.html" class="card">
-        <div class="card-header">
-          <h2>Pattern Matching Operator (LIKE)</h2>
-          <span class="arrow">&rsaquo;</span>
-        </div>
-        <p class="count">60 practice problems</p>
-        <div class="progress-bg"><div class="progress-bar"></div></div>
-        <span class="status">Not started</span>
-      </a>
+    /* ── glow orb ── */
+    body::after {
+      content: '';
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 500px;
+      background: radial-gradient(ellipse, rgba(79,142,247,0.07) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
 
-      <a href="seventh.html" class="card">
-        <div class="card-header">
-          <h2>Group Functions, Group By Clause, Having Clause</h2>
-          <span class="arrow">&rsaquo;</span>
-        </div>
-        <p class="count">50 practice problems</p>
-        <div class="progress-bg"><div class="progress-bar"></div></div>
-        <span class="status">Not started</span>
-      </a>
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 2rem 6rem;
+    }
 
-      <a href="eigth.html" class="card highlight">
-        <div class="card-header">
-          <h2 class="yellow-text">
-            Subqueries: Single Row, Multiple Row, Corelated Subquery
-          </h2>
-          <span class="arrow">&rsaquo;</span>
-        </div>
-        <p class="count">69 practice problems</p>
-        <div class="progress-bg"><div class="progress-bar"></div></div>
-        <span class="status">Not started</span>
-      </a>
+    /* ── header ── */
+    header { margin-bottom: 3rem; }
 
-      <a href="nineth.html" class="card">
-        <div class="card-header">
-          <h2>Interview Questions: Subqueries</h2>
-          <span class="arrow">&rsaquo;</span>
-        </div>
-        <p class="count">24 practice problems</p>
-        <div class="progress-bg"><div class="progress-bar"></div></div>
-        <span class="status">Not started</span>
-      </a>
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      border-radius: 4px;
+      padding: 4px 12px;
+      margin-bottom: 20px;
+      animation: fadeUp 0.5s ease both;
+    }
+    .tag::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s infinite;
+    }
 
-      <a href="tenth.html" class="card">
-        <div class="card-header">
-          <h2>
-            SCALAR FUNCTION: DATE, NUMERIC, STRING, CONVERSION, GENERAL & NULL
-          </h2>
-          <span class="arrow">&rsaquo;</span>
-        </div>
-        <p class="count">60 practice problems</p>
-        <div class="progress-bg"><div class="progress-bar"></div></div>
-        <span class="status">Not started</span>
-      </a>
+    h1 {
+      font-family: var(--display);
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+      animation: fadeUp 0.5s 0.08s ease both;
+    }
 
-      <a href="eleventh.html" class="card">
-        <div class="card-header">
-          <h2>
-            JOINS: INNER, CARTESIAN OR CROSS, LEFT OUTER, RIGHT OUTER, FULL
-            OUTER
-          </h2>
-          <span class="arrow">&rsaquo;</span>
-        </div>
-        <p class="count">40 practice problems</p>
-        <div class="progress-bg"><div class="progress-bar"></div></div>
-        <span class="status">Not started</span>
-      </a>
-      <a href="twelfth.html" class="card">
-        <div class="card-header">
-          <h2>INTERVIEW QUESTIONS: JOINS</h2>
-          <span class="arrow">&rsaquo;</span>
-        </div>
-        <p class="count">24 practice problems</p>
-        <div class="progress-bg"><div class="progress-bar"></div></div>
-        <span class="status">Not started</span>
-      </a>
-      <a href="thirteen.html" class="card">
-        <div class="card-header">
-          <h2>SET OPERATORS: UNION, UNION ALL, INTERSECT, MINUS</h2>
-          <span class="arrow">&rsaquo;</span>
-        </div>
-        <p class="count">25 practice problems</p>
-        <div class="progress-bg"><div class="progress-bar"></div></div>
-        <span class="status">Not started</span>
-      </a>
-      <a href="fourteen.html" class="card">
-        <div class="card-header">
-          <h2>VIEWS: CREATE, DROP, MATERLIZED</h2>
-          <span class="arrow">&rsaquo;</span>
-        </div>
-        <p class="count">35 practice problems</p>
-        <div class="progress-bg"><div class="progress-bar"></div></div>
-        <span class="status">Not started</span>
-      </a>
-      <a href="fifteen.html" class="card">
-        <div class="card-header">
-          <h2>TRANSACTION CONTROL LANGUAGE (TCL) and DATA CONTROL LANGUAGE (DCL)</h2>
-          <span class="arrow">&rsaquo;</span>
-        </div>
-        <p class="count">35 practice problems</p>
-        <div class="progress-bg"><div class="progress-bar"></div></div>
-        <span class="status">Not started</span>
-      </a>
-      <a href="sixteen.html" class="card">
-        <div class="card-header">
-          <h2>PLSQL: OUTPUT STATEMENT, DATATYPES, VARIABLES, CONSTANTS</h2>
-          <span class="arrow">&rsaquo;</span>
-        </div>
-        <p class="count">22 practice problems</p>
-        <div class="progress-bg"><div class="progress-bar"></div></div>
-        <span class="status">Not started</span>
-      </a>
-      <a href="seventeen.html" class="card">
-        <div class="card-header">
-          <h2>PLSQL: DECISION CONTROL STATEMENT: IF, IF-ELSE, IF-ELSIF-ELSE, CASE</h2>
-          <span class="arrow">&rsaquo;</span>
-        </div>
-        <p class="count">31 practice problems</p>
-        <div class="progress-bg"><div class="progress-bar"></div></div>
-        <span class="status">Not started</span>
-      </a>
-      <a href="eighteen.html" class="card">
-        <div class="card-header">
-          <h2>PLSQL: ITERATIVE CONTROL STATEMENT: SIMPLE LOOP, WHILE LOOP, FOR LOOP</h2>
-          <span class="arrow">&rsaquo;</span>
-        </div>
-        <p class="count">32 practice problems</p>
-        <div class="progress-bg"><div class="progress-bar"></div></div>
-        <span class="status">Not started</span>
-      </a>
+    .subtitle {
+      font-size: 12px;
+      color: var(--text-secondary);
+      letter-spacing: 0.04em;
+      animation: fadeUp 0.5s 0.15s ease both;
+    }
+    .subtitle span { color: var(--accent); }
+
+    /* ── stats ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 12px;
+      margin-bottom: 3rem;
+      animation: fadeUp 0.5s 0.2s ease both;
+    }
+
+    .stat {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      transition: border-color 0.2s;
+    }
+    .stat:hover { border-color: var(--border-hover); }
+
+    .stat-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-bottom: 8px;
+    }
+    .stat-value {
+      font-family: var(--display);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+    .stat-value.accent { color: var(--accent); }
+
+    /* ── section ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      animation: fadeUp 0.5s 0.25s ease both;
+    }
+    .section-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── grid ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 10px;
+    }
+
+    /* ── card ── */
+    .card {
+      display: block;
+      text-decoration: none;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+      opacity: 0;
+      animation: fadeUp 0.45s ease forwards;
+    }
+    .card:hover {
+      border-color: var(--border-hover);
+      background: var(--bg3);
+      transform: translateY(-2px);
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      background: radial-gradient(600px circle at var(--mx,50%) var(--my,50%), rgba(79,142,247,0.05), transparent 40%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .card:hover::after { opacity: 1; }
+
+    /* left accent stripe */
+    .card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 16px; bottom: 16px;
+      width: 2px;
+      border-radius: 0 2px 2px 0;
+      background: var(--accent);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .card:hover::before { opacity: 0.5; }
+    .card.featured::before { opacity: 1; }
+
+    .card.featured {
+      border-color: var(--accent-border);
+      background: linear-gradient(135deg, var(--bg2) 0%, rgba(79,142,247,0.05) 100%);
+    }
+    .card.featured:hover {
+      border-color: rgba(79,142,247,0.6);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .card-num {
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--text-tertiary);
+      letter-spacing: 0.06em;
+      padding-top: 2px;
+      min-width: 22px;
+    }
+
+    .card-title {
+      font-family: var(--mono);
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--text-primary);
+      line-height: 1.55;
+      flex: 1;
+    }
+    .card.featured .card-title { color: #93bafb; }
+
+    .arrow {
+      font-size: 14px;
+      color: var(--text-tertiary);
+      transition: color 0.2s, transform 0.2s;
+      padding-top: 1px;
+    }
+    .card:hover .arrow {
+      color: var(--accent);
+      transform: translateX(2px);
+    }
+
+    .card-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .count {
+      font-size: 10px;
+      color: var(--text-tertiary);
+      letter-spacing: 0.04em;
+    }
+
+    .badge {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      padding: 2px 9px;
+      border-radius: 99px;
+      background: var(--bg3);
+      color: var(--text-tertiary);
+      border: 1px solid var(--border);
+    }
+    .card.featured .badge {
+      background: var(--accent-dim);
+      color: var(--accent);
+      border-color: var(--accent-border);
+    }
+
+    .progress-track {
+      height: 2px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      border-radius: 99px;
+    }
+    .card.featured .progress-fill { background: #93bafb; }
+
+    /* ── animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
+
+    /* stagger cards */
+    .card:nth-child(1)  { animation-delay: 0.05s; }
+    .card:nth-child(2)  { animation-delay: 0.10s; }
+    .card:nth-child(3)  { animation-delay: 0.13s; }
+    .card:nth-child(4)  { animation-delay: 0.16s; }
+    .card:nth-child(5)  { animation-delay: 0.19s; }
+    .card:nth-child(6)  { animation-delay: 0.22s; }
+    .card:nth-child(7)  { animation-delay: 0.25s; }
+    .card:nth-child(8)  { animation-delay: 0.28s; }
+    .card:nth-child(9)  { animation-delay: 0.31s; }
+    .card:nth-child(10) { animation-delay: 0.34s; }
+    .card:nth-child(11) { animation-delay: 0.37s; }
+    .card:nth-child(12) { animation-delay: 0.40s; }
+    .card:nth-child(13) { animation-delay: 0.43s; }
+    .card:nth-child(14) { animation-delay: 0.46s; }
+    .card:nth-child(15) { animation-delay: 0.49s; }
+    .card:nth-child(16) { animation-delay: 0.52s; }
+    .card:nth-child(17) { animation-delay: 0.55s; }
+    .card:nth-child(18) { animation-delay: 0.58s; }
+
+    @media (max-width: 600px) {
+      .wrap { padding: 2rem 1.2rem 4rem; }
+      .grid { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: repeat(3, minmax(0,1fr)); }
+      .stat-value { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="tag">Study Dashboard</div>
+    <h1>Database Management<br>System</h1>
+    <p class="subtitle"><span>18 modules</span> &nbsp;·&nbsp; 671 practice problems</p>
+  </header>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-label">Modules</div>
+      <div class="stat-value">18</div>
     </div>
-  </body>
+    <div class="stat">
+      <div class="stat-label">Problems</div>
+      <div class="stat-value">671</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Progress</div>
+      <div class="stat-value accent">0%</div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <span class="section-label">All modules</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="grid" id="grid">
+
+    <a href="first.html" class="card">
+      <div class="card-top">
+        <span class="card-num">01</span>
+        <span class="card-title">Data Definition Language (DDL) Commands</span>
+        <span class="arrow">›</span>
+      </div>
+      <div class="card-foot">
+        <span class="count">50 problems</span>
+        <span class="badge">Not started</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </a>
+
+    <a href="second.html" class="card">
+      <div class="card-top">
+        <span class="card-num">02</span>
+        <span class="card-title">Data Manipulation Language (DML) Commands</span>
+        <span class="arrow">›</span>
+      </div>
+      <div class="card-foot">
+        <span class="count">30 problems</span>
+        <span class="badge">Not started</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </a>
+
+    <a href="third.html" class="card">
+      <div class="card-top">
+        <span class="card-num">03</span>
+        <span class="card-title">Interview Questions: DML Commands</span>
+        <span class="arrow">›</span>
+      </div>
+      <div class="card-foot">
+        <span class="count">20 problems</span>
+        <span class="badge">Not started</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </a>
+
+    <a href="fourth.html" class="card">
+      <div class="card-top">
+        <span class="card-num">04</span>
+        <span class="card-title">Data Query Language (DQL): SELECT</span>
+        <span class="arrow">›</span>
+      </div>
+      <div class="card-foot">
+        <span class="count">10 problems</span>
+        <span class="badge">Not started</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </a>
+
+    <a href="fifth.html" class="card">
+      <div class="card-top">
+        <span class="card-num">05</span>
+        <span class="card-title">Where Clause, Order By and Alias</span>
+        <span class="arrow">›</span>
+      </div>
+      <div class="card-foot">
+        <span class="count">54 problems</span>
+        <span class="badge">Not started</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </a>
+
+    <a href="sixth.html" class="card">
+      <div class="card-top">
+        <span class="card-num">06</span>
+        <span class="card-title">Pattern Matching Operator (LIKE)</span>
+        <span class="arrow">›</span>
+      </div>
+      <div class="card-foot">
+        <span class="count">60 problems</span>
+        <span class="badge">Not started</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </a>
+
+    <a href="seventh.html" class="card">
+      <div class="card-top">
+        <span class="card-num">07</span>
+        <span class="card-title">Group Functions, Group By Clause, Having Clause</span>
+        <span class="arrow">›</span>
+      </div>
+      <div class="card-foot">
+        <span class="count">50 problems</span>
+        <span class="badge">Not started</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </a>
+
+    <a href="eigth.html" class="card featured">
+      <div class="card-top">
+        <span class="card-num">08</span>
+        <span class="card-title">Subqueries: Single Row, Multiple Row, Correlated Subquery</span>
+        <span class="arrow">›</span>
+      </div>
+      <div class="card-foot">
+        <span class="count">69 problems</span>
+        <span class="badge">Not started</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </a>
+
+    <a href="nineth.html" class="card">
+      <div class="card-top">
+        <span class="card-num">09</span>
+        <span class="card-title">Interview Questions: Subqueries</span>
+        <span class="arrow">›</span>
+      </div>
+      <div class="card-foot">
+        <span class="count">24 problems</span>
+        <span class="badge">Not started</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </a>
+
+    <a href="tenth.html" class="card">
+      <div class="card-top">
+        <span class="card-num">10</span>
+        <span class="card-title">Scalar Functions: Date, Numeric, String, Conversion, General &amp; Null</span>
+        <span class="arrow">›</span>
+      </div>
+      <div class="card-foot">
+        <span class="count">60 problems</span>
+        <span class="badge">Not started</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </a>
+
+    <a href="eleventh.html" class="card">
+      <div class="card-top">
+        <span class="card-num">11</span>
+        <span class="card-title">Joins: Inner, Cartesian/Cross, Left Outer, Right Outer, Full Outer</span>
+        <span class="arrow">›</span>
+      </div>
+      <div class="card-foot">
+        <span class="count">40 problems</span>
+        <span class="badge">Not started</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </a>
+
+    <a href="twelfth.html" class="card">
+      <div class="card-top">
+        <span class="card-num">12</span>
+        <span class="card-title">Interview Questions: Joins</span>
+        <span class="arrow">›</span>
+      </div>
+      <div class="card-foot">
+        <span class="count">24 problems</span>
+        <span class="badge">Not started</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </a>
+
+    <a href="thirteen.html" class="card">
+      <div class="card-top">
+        <span class="card-num">13</span>
+        <span class="card-title">Set Operators: Union, Union All, Intersect, Minus</span>
+        <span class="arrow">›</span>
+      </div>
+      <div class="card-foot">
+        <span class="count">25 problems</span>
+        <span class="badge">Not started</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </a>
+
+    <a href="fourteen.html" class="card">
+      <div class="card-top">
+        <span class="card-num">14</span>
+        <span class="card-title">Views: Create, Drop, Materialized</span>
+        <span class="arrow">›</span>
+      </div>
+      <div class="card-foot">
+        <span class="count">35 problems</span>
+        <span class="badge">Not started</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </a>
+
+    <a href="fifteen.html" class="card">
+      <div class="card-top">
+        <span class="card-num">15</span>
+        <span class="card-title">Transaction Control Language (TCL) and Data Control Language (DCL)</span>
+        <span class="arrow">›</span>
+      </div>
+      <div class="card-foot">
+        <span class="count">35 problems</span>
+        <span class="badge">Not started</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </a>
+
+    <a href="sixteen.html" class="card">
+      <div class="card-top">
+        <span class="card-num">16</span>
+        <span class="card-title">PL/SQL: Output Statement, Datatypes, Variables, Constants</span>
+        <span class="arrow">›</span>
+      </div>
+      <div class="card-foot">
+        <span class="count">22 problems</span>
+        <span class="badge">Not started</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </a>
+
+    <a href="seventeen.html" class="card">
+      <div class="card-top">
+        <span class="card-num">17</span>
+        <span class="card-title">PL/SQL: Decision Control — IF, IF-ELSE, IF-ELSIF-ELSE, CASE</span>
+        <span class="arrow">›</span>
+      </div>
+      <div class="card-foot">
+        <span class="count">31 problems</span>
+        <span class="badge">Not started</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </a>
+
+    <a href="eighteen.html" class="card">
+      <div class="card-top">
+        <span class="card-num">18</span>
+        <span class="card-title">PL/SQL: Iterative Control — Simple Loop, While Loop, For Loop</span>
+        <span class="arrow">›</span>
+      </div>
+      <div class="card-foot">
+        <span class="count">32 problems</span>
+        <span class="badge">Not started</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </a>
+
+  </div>
+</div>
+
+<script>
+  // mouse glow effect on cards
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+      card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+    });
+  });
+</script>
+
+</body>
 </html>
