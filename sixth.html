@@ -145,12 +145,12 @@ pre {
         <div class="table-schema">EMP (EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO)</div>
         <div class="table-schema">DEPT (DEPTNO, DNAME, LOC)</div>
         <div class="question-text">Display employees whose name starts with A.</div>
-        <div class="answer-section">
-            <button class="dropdown-trigger" onclick="toggleAnswer(this)">Show Answer</button>
-            <div class="answer-content">
-                <code>SELECT * FROM EMP WHERE ENAME LIKE 'A%';</code>
-            </div>
-        </div>
+        <details>
+    <summary>Show Answer</summary>
+    <div class="answer-content">
+SELECT * FROM EMP WHERE ENAME LIKE 'A%';
+    </div>
+</details>
     </div>
 
     <div class="card">
