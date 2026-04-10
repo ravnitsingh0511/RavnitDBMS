@@ -5,135 +5,131 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SQL Selection Queries - Wildcards</title>
     <style>
-        :root {
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --primary-yellow: #ffc107;
-            --text-main: #333;
-            --text-muted: #666;
-            --border-color: #eee;
-        }
+        * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            margin: 0;
-            padding: 40px;
-            color: var(--text-main);
-        }
+body {
+  background: #0f172a;
+  color: white;
+  padding: 20px;
+}
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
+/* Center layout */
+body > * {
+  max-width: 1000px;
+  margin: auto;
+}
 
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 3px solid var(--primary-yellow);
-            padding-bottom: 20px;
-            margin-bottom: 40px;
-        }
+/* Header */
+.header, h1 {
+  margin-bottom: 20px;
+}
 
-        h1 { font-size: 2.5rem; margin: 0; font-weight: 800; }
+.back-btn, .back-link {
+  display: inline-block;
+  margin-bottom: 20px;
+  text-decoration: none;
+  background: #1e293b;
+  padding: 8px 14px;
+  border-radius: 8px;
+  color: #cbd5f5;
+  transition: 0.3s;
+}
 
-        .back-btn {
-            background: #e0e0e0;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            color: #333;
-        }
+.back-btn:hover, .back-link:hover {
+  background: #0ea5e9;
+  color: white;
+}
 
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 30px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
+/* ===== CARDS (WORKS FOR BOTH TYPES) ===== */
 
-        .q-number {
-            background: var(--primary-yellow);
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
+.question-card,
+.qa-item {
+  background: #1e293b;
+  margin-bottom: 20px;
+  padding: 20px;
+  border-radius: 12px;
+  transition: 0.3s;
+}
 
-        .table-schema {
-            color: var(--text-muted);
-            font-family: monospace;
-            font-size: 0.95rem;
-            margin-bottom: 5px;
-            line-height: 1.4;
-        }
+.question-card:hover,
+.qa-item:hover {
+  transform: translateY(-3px);
+}
 
-        .question-text {
-            font-size: 1.25rem;
-            font-weight: 500;
-            margin: 15px 0;
-        }
+/* ===== NUMBER ===== */
 
-        .answer-section {
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background-color: #fafafa;
-        }
+.q-number,
+.number-badge {
+  background: #0ea5e9;
+  color: white;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin-right: 10px;
+  font-weight: bold;
+}
 
-        .dropdown-trigger {
-            width: 100%;
-            padding: 15px 20px;
-            text-align: left;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: bold;
-            color: #555;
-            display: flex;
-            align-items: center;
-        }
+/* ===== TEXT ===== */
 
-        .dropdown-trigger::before {
-            content: '▶';
-            font-size: 0.7rem;
-            margin-right: 10px;
-            transition: transform 0.3s;
-        }
+.q-text,
+.question-text {
+  font-size: 15px;
+}
 
-        .dropdown-trigger.active::before { transform: rotate(90deg); }
+/* ===== BUTTON STYLE (DDL) ===== */
 
-        .answer-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-            padding: 0 20px;
-        }
+.question-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
 
-        .answer-content.show {
-            max-height: 200px;
-            padding: 15px 20px;
-            border-top: 1px solid var(--border-color);
-        }
+/* ===== ANSWERS ===== */
 
-        code {
-            background: #131212;
-            padding: 12px;
-            display: block;
-            border-radius: 4px;
-            color: #b3afb1;
-            font-family: 'Courier New', Courier, monospace;
-            font-weight: bold;
-        }
+details {
+  margin-top: 15px;
+}
+
+summary {
+  background: #020617;
+  color: #cbd5f5;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.answer-content,
+.answer-panel,
+pre {
+  background: #020617;
+  color: #38bdf8;
+  padding: 15px;
+  border-radius: 8px;
+  font-family: monospace;
+  white-space: pre-wrap;
+}
+
+/* Fix DDL spacing */
+.answer-inner {
+  padding-left: 0;
+}
+
+/* Arrow */
+.arrow-icon {
+  color: #94a3b8;
+}
     </style>
 </head>
 <body>
