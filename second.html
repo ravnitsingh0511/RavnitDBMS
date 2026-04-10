@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SQL Practice Questions</title>
     <style>
-        * {
+       * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -25,35 +25,30 @@ body > * {
 }
 
 /* Header */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-  border-bottom: 1px solid #1e293b;
-  padding-bottom: 10px;
+.header, h1 {
+  margin-bottom: 20px;
 }
 
-.header h1 {
-  font-size: 26px;
-}
-
-.back-btn {
+.back-btn, .back-link {
+  display: inline-block;
+  margin-bottom: 20px;
   text-decoration: none;
   background: #1e293b;
-  padding: 10px 16px;
+  padding: 8px 14px;
   border-radius: 8px;
   color: #cbd5f5;
   transition: 0.3s;
 }
 
-.back-btn:hover {
+.back-btn:hover, .back-link:hover {
   background: #0ea5e9;
   color: white;
 }
 
-/* Cards */
-.question-card {
+/* ===== CARDS (WORKS FOR BOTH TYPES) ===== */
+
+.question-card,
+.qa-item {
   background: #1e293b;
   margin-bottom: 20px;
   padding: 20px;
@@ -61,22 +56,48 @@ body > * {
   transition: 0.3s;
 }
 
-.question-card:hover {
+.question-card:hover,
+.qa-item:hover {
   transform: translateY(-3px);
 }
 
-/* Question number */
-.q-number {
+/* ===== NUMBER ===== */
+
+.q-number,
+.number-badge {
   background: #0ea5e9;
   color: white;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin-right: 10px;
+  font-weight: bold;
 }
 
-/* Text */
-.q-text {
+/* ===== TEXT ===== */
+
+.q-text,
+.question-text {
   font-size: 15px;
 }
 
-/* Answer section */
+/* ===== BUTTON STYLE (DDL) ===== */
+
+.question-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* ===== ANSWERS ===== */
+
 details {
   margin-top: 15px;
 }
@@ -89,13 +110,25 @@ summary {
   cursor: pointer;
 }
 
-.answer-content {
+.answer-content,
+.answer-panel,
+pre {
   background: #020617;
   color: #38bdf8;
   padding: 15px;
   border-radius: 8px;
   font-family: monospace;
   white-space: pre-wrap;
+}
+
+/* Fix DDL spacing */
+.answer-inner {
+  padding-left: 0;
+}
+
+/* Arrow */
+.arrow-icon {
+  color: #94a3b8;
 }
     </style>
 </head>
